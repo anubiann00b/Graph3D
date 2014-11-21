@@ -35,28 +35,58 @@ public class Graph3D {
     
     int VBOVertexHandle;
     int VBOColorHandle;
-    final int VERTICES = 72;
+    
+    float scale = 1/2f;
+    int start = -20;
+    int end = 20;
+    
+    final int VERTICES = 3*4*(start-end)*(start-end);
     
     FloatBuffer positionBuffer;
     FloatBuffer colorBuffer;
     
+    private float func(float x, float y) {
+        return (3*x*x + 7*y*y + 10*x*y + x + 2*y)/10f;
+    }
+    
     private void loadData() {
-        positionBuffer.put(new float[] {
-            5, 5, 0, 0, 5, 0, 0, 5, 5, 5, 5, 5,
-            5, 0, 5, 0, 0, 5, 0, 0, 0, 5, 0, 0,
-            5, 5, 5, 0, 5, 5, 0, 0, 5, 5, 0, 5,
-            5, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 0,
-            0, 5, 5, 0, 5, 0, 0, 0, 0, 0, 0, 5,
-            5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 0, 0
-        });
-        colorBuffer.put(new float[] {
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-            1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1
-        });
+        for (int x=start;x<end;x++) {
+            for (int y=start;y<end;y++) {
+                float sx = x*scale;
+                float sy = y*scale;
+                positionBuffer.put(x);
+                positionBuffer.put(func(sx, sy));
+                positionBuffer.put(y);
+                
+                positionBuffer.put(x+1);
+                positionBuffer.put(func(sx+scale, sy));
+                positionBuffer.put(y);
+                
+                positionBuffer.put(x+1);
+                positionBuffer.put(func(sx+scale, sy+scale));
+                positionBuffer.put(y+1);
+                
+                positionBuffer.put(x);
+                positionBuffer.put(func(sx, sy+scale));
+                positionBuffer.put(y+1);
+                
+                colorBuffer.put(1);
+                colorBuffer.put(1);
+                colorBuffer.put(0);
+                
+                colorBuffer.put(1);
+                colorBuffer.put(0);
+                colorBuffer.put(1);
+                
+                colorBuffer.put(0);
+                colorBuffer.put(1);
+                colorBuffer.put(1);
+                
+                colorBuffer.put(0);
+                colorBuffer.put(1);
+                colorBuffer.put(0);
+            }
+        }
     }
     
     private void render() {
