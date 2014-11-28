@@ -36,17 +36,30 @@ public class Graph3D {
     int VBOVertexHandle;
     int VBOColorHandle;
     
-    float scale = 1/2f;
-    int start = -20;
-    int end = 20;
+    float scale = 1/10f;
+    int start = -90;
+    int end = 90;
     
-    final int VERTICES = 3*4*(start-end)*(start-end);
+    float q11 = 1;
+    float q12 = 2;
+    float q21 = 3;
+    float q22 = 4;
+    float c1 = 5;
+    float c2 = 6;
+    
+    float xMax = 8;
+    float xMin = 5;
+    float yMax = 4;
+    float yMin = -3;
+    
+    final int VERTICES = 4*4*(start-end)*(start-end) + 16;
     
     FloatBuffer positionBuffer;
     FloatBuffer colorBuffer;
     
     private float func(float x, float y) {
-        return (3*x*x + 7*y*y + 10*x*y + x + 2*y)/10f;
+        return (q11*x*x + q22*y*y + (q12+q21)*x*y + c1*x + c2*y)/10f;
+        //return (3*x*x + 7*y*y + 10*x*y + x + 2*y)/10f;
     }
     
     private void loadData() {
@@ -73,19 +86,46 @@ public class Graph3D {
                 colorBuffer.put(1);
                 colorBuffer.put(1);
                 colorBuffer.put(0);
-                
-                colorBuffer.put(1);
-                colorBuffer.put(0);
                 colorBuffer.put(1);
                 
+                colorBuffer.put(1);
                 colorBuffer.put(0);
                 colorBuffer.put(1);
                 colorBuffer.put(1);
                 
                 colorBuffer.put(0);
                 colorBuffer.put(1);
+                colorBuffer.put(1);
+                colorBuffer.put(1);
+                
                 colorBuffer.put(0);
+                colorBuffer.put(1);
+                colorBuffer.put(0);
+                colorBuffer.put(1);
             }
+        }
+        
+        positionBuffer.put(xMax);
+        positionBuffer.put(5);
+        positionBuffer.put(yMax);
+        
+        positionBuffer.put(xMin);
+        positionBuffer.put(5);
+        positionBuffer.put(yMax);
+        
+        positionBuffer.put(xMin);
+        positionBuffer.put(5);
+        positionBuffer.put(yMin);
+        
+        positionBuffer.put(xMax);
+        positionBuffer.put(5);
+        positionBuffer.put(yMin);
+        
+        for (int i=0;i<4;i++) {
+            colorBuffer.put(1);
+            colorBuffer.put(0);
+            colorBuffer.put(0);
+            colorBuffer.put(0.5f);
         }
     }
     
@@ -114,8 +154,8 @@ public class Graph3D {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBOVertexHandle);
         GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0L);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBOColorHandle);
-        GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0L);
-        GL11.glDrawArrays(GL11.GL_QUADS, 0, VERTICES/3);
+        GL11.glColorPointer(4, GL11.GL_FLOAT, 0, 0L);
+        GL11.glDrawArrays(GL11.GL_QUADS, 0, VERTICES/4);
         GL11.glPopMatrix();
     }
     
@@ -127,6 +167,9 @@ public class Graph3D {
         GL11.glClearDepth(1.0); // Buffer depth, allows objects to draw over things behind them.
         GL11.glEnable(GL11.GL_DEPTH_TEST); // Depth testing (see above).
         GL11.glDepthFunc(GL11.GL_LEQUAL); // Type of depth testing.
+        
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
