@@ -108,21 +108,21 @@ public class Graph3D {
         
         float h = .75f;
         
-        positionBuffer.put(xMax);
+        positionBuffer.put(xMax*res);
         positionBuffer.put(h);
-        positionBuffer.put(yMax);
+        positionBuffer.put(yMax*res);
         
-        positionBuffer.put(xMin);
+        positionBuffer.put(xMin*res);
         positionBuffer.put(h);
-        positionBuffer.put(yMax);
+        positionBuffer.put(yMax*res);
         
-        positionBuffer.put(xMin);
+        positionBuffer.put(xMin*res);
         positionBuffer.put(h);
-        positionBuffer.put(yMin);
+        positionBuffer.put(yMin*res);
         
-        positionBuffer.put(xMax);
+        positionBuffer.put(xMax*res);
         positionBuffer.put(h);
-        positionBuffer.put(yMin);
+        positionBuffer.put(yMin*res);
 
         for (int i=0;i<4;i++) {
             colorBuffer.put(0);
@@ -133,21 +133,21 @@ public class Graph3D {
         
         // y = 1 - x
         
-        positionBuffer.put(10);
-        positionBuffer.put(-5);
-        positionBuffer.put(-9);
+        positionBuffer.put(3);
+        positionBuffer.put(-1);
+        positionBuffer.put(-2);
         
-        positionBuffer.put(10);
-        positionBuffer.put(10);
-        positionBuffer.put(-9);
+        positionBuffer.put(3);
+        positionBuffer.put(2);
+        positionBuffer.put(-2);
         
-        positionBuffer.put(-10);
-        positionBuffer.put(10);
-        positionBuffer.put(11);
+        positionBuffer.put(-2);
+        positionBuffer.put(2);
+        positionBuffer.put(3);
         
-        positionBuffer.put(-10);
-        positionBuffer.put(-5);
-        positionBuffer.put(11);
+        positionBuffer.put(-2);
+        positionBuffer.put(-1);
+        positionBuffer.put(3);
         
         for (int i=0;i<4;i++) {
             colorBuffer.put(1);
