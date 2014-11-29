@@ -8,7 +8,7 @@ public class Camera {
 
     private static final Vector position = new Vector();
     private static final Vector rotation = new Vector();
-    private static final float speed = 0.72f;
+    private static final float speed = 0.06f;
     
     public static float getCamX() { return position.getX(); }
     public static float getCamY() { return position.getY(); }

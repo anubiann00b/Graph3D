@@ -36,90 +36,118 @@ public class Graph3D {
     int VBOVertexHandle;
     int VBOColorHandle;
     
-    float scale = 1/10f;
-    int start = -90;
-    int end = 90;
-    
     float q11 = 1;
-    float q12 = 2;
-    float q21 = 3;
-    float q22 = 4;
-    float c1 = 5;
-    float c2 = 6;
+    float q12 = .5f;
+    float q21 = .5f;
+    float q22 = 1;
+    float c1 = 0;
+    float c2 = 0;
     
-    float xMax = 8;
-    float xMin = 5;
-    float yMax = 4;
-    float yMin = -3;
+    float xMax = 20;
+    float xMin = -20;
+    float yMax = 20;
+    float yMin = -20;
     
-    final int VERTICES = 4*4*(start-end)*(start-end) + 16;
+    float res = 1/10f;
+    float heightScale = 1f;
+    int start = (int) Math.floor(Math.min(xMin, yMin));
+    int end = (int) Math.ceil(Math.max(xMax, yMax));
+    
+    final int VERTICES = 4*4*(start-end)*(start-end) + 16*2;
     
     FloatBuffer positionBuffer;
     FloatBuffer colorBuffer;
     
     private float func(float x, float y) {
-        return (q11*x*x + q22*y*y + (q12+q21)*x*y + c1*x + c2*y)/10f;
+        return (q11*x*x + q22*y*y + (q12+q21)*x*y + c1*x + c2*y);
         //return (3*x*x + 7*y*y + 10*x*y + x + 2*y)/10f;
     }
     
     private void loadData() {
         for (int x=start;x<end;x++) {
             for (int y=start;y<end;y++) {
-                float sx = x*scale;
-                float sy = y*scale;
-                positionBuffer.put(x);
-                positionBuffer.put(func(sx, sy));
-                positionBuffer.put(y);
+                float sx = x*res;
+                float sy = y*res;
+                positionBuffer.put(sx);
+                positionBuffer.put(func(sx, sy)*heightScale);
+                positionBuffer.put(sy);
                 
-                positionBuffer.put(x+1);
-                positionBuffer.put(func(sx+scale, sy));
-                positionBuffer.put(y);
+                positionBuffer.put(sx+res);
+                positionBuffer.put(func(sx+res, sy)*heightScale);
+                positionBuffer.put(sy);
                 
-                positionBuffer.put(x+1);
-                positionBuffer.put(func(sx+scale, sy+scale));
-                positionBuffer.put(y+1);
+                positionBuffer.put(sx+res);
+                positionBuffer.put(func(sx+res, sy+res)*heightScale);
+                positionBuffer.put(sy+res);
                 
-                positionBuffer.put(x);
-                positionBuffer.put(func(sx, sy+scale));
-                positionBuffer.put(y+1);
+                positionBuffer.put(sx);
+                positionBuffer.put(func(sx, sy+res)*heightScale);
+                positionBuffer.put(sy+res);
                 
-                colorBuffer.put(1);
-                colorBuffer.put(1);
-                colorBuffer.put(0);
-                colorBuffer.put(1);
-                
-                colorBuffer.put(1);
-                colorBuffer.put(0);
+                colorBuffer.put((x-(float)start)/(float)(end-start));
+                colorBuffer.put((y-(float)start)/(float)(end-start));
                 colorBuffer.put(1);
                 colorBuffer.put(1);
                 
-                colorBuffer.put(0);
-                colorBuffer.put(1);
+                colorBuffer.put((x-(float)start)/(float)(end-start));
+                colorBuffer.put((y-(float)start)/(float)(end-start));
                 colorBuffer.put(1);
                 colorBuffer.put(1);
                 
-                colorBuffer.put(0);
+                colorBuffer.put((x-(float)start)/(float)(end-start));
+                colorBuffer.put((y-(float)start)/(float)(end-start));
                 colorBuffer.put(1);
-                colorBuffer.put(0);
+                colorBuffer.put(1);
+                
+                colorBuffer.put((x-(float)start)/(float)(end-start));
+                colorBuffer.put((y-(float)start)/(float)(end-start));
+                colorBuffer.put(1);
                 colorBuffer.put(1);
             }
         }
         
+        float h = .75f;
+        
         positionBuffer.put(xMax);
-        positionBuffer.put(5);
+        positionBuffer.put(h);
         positionBuffer.put(yMax);
         
         positionBuffer.put(xMin);
-        positionBuffer.put(5);
+        positionBuffer.put(h);
         positionBuffer.put(yMax);
         
         positionBuffer.put(xMin);
-        positionBuffer.put(5);
+        positionBuffer.put(h);
         positionBuffer.put(yMin);
         
         positionBuffer.put(xMax);
-        positionBuffer.put(5);
+        positionBuffer.put(h);
         positionBuffer.put(yMin);
+
+        for (int i=0;i<4;i++) {
+            colorBuffer.put(0);
+            colorBuffer.put(1);
+            colorBuffer.put(0);
+            colorBuffer.put(0.5f);
+        }
+        
+        // y = 1 - x
+        
+        positionBuffer.put(10);
+        positionBuffer.put(-5);
+        positionBuffer.put(-9);
+        
+        positionBuffer.put(10);
+        positionBuffer.put(10);
+        positionBuffer.put(-9);
+        
+        positionBuffer.put(-10);
+        positionBuffer.put(10);
+        positionBuffer.put(11);
+        
+        positionBuffer.put(-10);
+        positionBuffer.put(-5);
+        positionBuffer.put(11);
         
         for (int i=0;i<4;i++) {
             colorBuffer.put(1);
